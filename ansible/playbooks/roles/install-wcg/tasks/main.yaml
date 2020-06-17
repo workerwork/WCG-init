@@ -1,0 +1,39 @@
+# Copyright 2019 baicells Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+- name: Check the system
+  tags: ["never", "check-system"] 
+  ignore_errors: false
+  fail:
+    msg: "Conditions::
+          kernel:{{ system.kernel }} 
+          your kernel is {{ ansible_kernel }}"
+  when:
+  - ansible_kernel != (system.kernel) 
+
+- name: install kernel-eGW
+  tags: "install kernel-eGW"
+  block:
+  - include: install_kernel-eGW.yaml
+
+- name: install redis
+  tags: ["never", "install redis"]
+  block:
+  - include: install_redis.yaml
+
+- name: install eGW
+  tags: "install eGW"
+  block:
+  - include: install_eGW.yaml
